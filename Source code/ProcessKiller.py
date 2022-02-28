@@ -32,7 +32,7 @@ def killProcess(application):
         except:
             pass
     else:
-        print(application + " not found")
+        print(application + " not found/open at the moment")
 
 
 if __name__ == "__main__":

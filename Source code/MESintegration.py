@@ -20,6 +20,7 @@ def fileList(directory, *extension):
     programs = []
 
     for extns in extension[0]:
+        print(extns)
         if os.path.isdir(directory):
             for filename in os.listdir(directory):
                 if filename.lower().endswith(extns):
@@ -37,36 +38,19 @@ def LaunchBrowser():
     MESWebSite = "http://FIT-WCAPP-01.subzero.com:8000/EnterpriseConsole/BPMUITemplates/Default/Repository/Site/CustomLogin.aspx?ListItemId=E0A7E9D4-02F2-4C6D-898C-8714B73C8C08&FormLink=NGDF%20Station%201800"
     # import Chrome web driver
 
+    #returns a list of files in the provided directory with specified extention
     listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
 
     for x in listOfChromeDrivers:
         try:
             driver = webdriver.Chrome(os.path.join(".\\Drivers\\", x))
+            #opens the provided website
             driver.get(MESWebSite)
             return driver
         except:
             pass
     print("None of the drivers worked")
     exit(0)
-
-
-"""    try:
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get(MESWebSite)
-        return driver
-    except:
-
-        listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
-
-        for x in listOfChromeDrivers:
-            try:
-                driver = webdriver.Chrome(x)
-                driver.get(MESWebSite)
-                return driver
-            except:
-                pass
-        print("None of the drivers worked")"""
-
 
 
 def pressButton(driver, findBy, errorMessage, ID=None, XPath=None):

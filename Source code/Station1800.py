@@ -14,7 +14,7 @@ from ProcessKiller import killProcess
 import win32gui, win32con
 
 
-class _time:
+class time:
     def __init__(self, clockIn, lastScan):
         self.clockIn = clockIn
         self.lastScan = lastScan
@@ -528,11 +528,7 @@ def doMacro(): #Macro is performed
     print("GUI up. Clearing entry fields")
     inputField.Serial.focus_set()                           # Set focus on serial input field
 
-    workingTime.lastScan = time.perf_counter()              # Taking time after each unit done
 
-    if workingTime.lastScan - workingTime.clockIn > 28800:  #logout after 8 hours
-        messagebox.showwarning("Shift Over", "Your shift for the day is over, bye")
-        Logout(loginFrame)
 
 
 ###################################################################################################################
@@ -759,7 +755,7 @@ if __name__ == "__main__":
     inputField = inputField(None, None, None, None, None, None, None, None, None, None, None)
     macroSettings = settingsData("", "", "", "","", "", "", "")
     driver = driver(None)
-    workingTime = _time(0, 0)
+    # workingTime = _time(0, 0)
 
 
     # Create the settings file that the macro will use for the LabViewIntegration
@@ -786,8 +782,8 @@ if __name__ == "__main__":
         macroSettings["Miscellaneous"]["testFinishedKeyWord"] = "Test Complete..."
 
         # save to a file
-        with open(macroSettings_Path, 'w') as configfile:
-            macroSettings.write(configfile)
+        # with open(macroSettings_Path, 'w') as configfile:
+        #     macroSettings.write(configfile)
 
     # Kill any Chrome process
     killProcess("CHROME.EXE")
