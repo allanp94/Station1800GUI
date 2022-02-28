@@ -126,7 +126,7 @@ def login(selfFrame, nextFrame, selfInputField, nextInputField): #logging in fun
     data.badge = selfInputField.get()
     if data.badge.isdigit() and len(data.badge) <= 6 and len(data.badge) >= 4:
         driver.driver = MESLogIn(data)                                                                                # MES Integration
-        workingTime.clockIn = time.perf_counter()
+        # workingTime.clockIn = time.perf_counter() removed the the clockin function 
         ClearField(inputField.Serial)
         ClearField(inputField.Puma)
         ClearField(inputField.MDL1)
