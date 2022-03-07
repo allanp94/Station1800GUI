@@ -49,26 +49,6 @@ def LaunchBrowser():
     print("None of the drivers worked")
     exit(0)
 
-
-"""    try:
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get(MESWebSite)
-        return driver
-    except:
-
-        listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
-
-        for x in listOfChromeDrivers:
-            try:
-                driver = webdriver.Chrome(x)
-                driver.get(MESWebSite)
-                return driver
-            except:
-                pass
-        print("None of the drivers worked")"""
-
-
-
 def pressButton(driver, findBy, errorMessage, ID=None, XPath=None):
     if findBy == "ID":
         try:
@@ -145,7 +125,7 @@ def waitForWebsite(driver, findBy, item, waitTime):
                 driver.find_element_by_class_name(item)
                 print("Found 123")
             except:
-                print("No luck searching by object with driver.find_element_by_class_name(item)")
+                print("No luck searching by object with driver.find_element_by_class_name(" + item + ")")
 
 
 def fillEntryBox(driver,findBy, errorMessage, text, ID=None, XPath=None, Class=None):

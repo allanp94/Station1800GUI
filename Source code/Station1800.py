@@ -126,15 +126,13 @@ def login(selfFrame, nextFrame, selfInputField, nextInputField): #logging in fun
     data.badge = selfInputField.get()
     if data.badge.isdigit() and len(data.badge) <= 6 and len(data.badge) >= 4:
         driver.driver = MESLogIn(data)                                                                                # MES Integration
-        workingTime.clockIn = time.perf_counter()
+        # workingTime.clockIn = time.perf_counter() will not use a time clockin 
         ClearField(inputField.Serial)
         ClearField(inputField.Puma)
         ClearField(inputField.MDL1)
         ClearField(inputField.MDL2)
 
         raise_frame(nextFrame, nextInputField)
-
-
     else:
         displayError(7, "Invalid ID")
         # Clear entry field
@@ -209,12 +207,13 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
     # data.attribute = selfEntry.get()                            # Save serial number
     if attribute == "serialNumber":
         data.serialNumber = selfEntry.get()
-
         serialNum = data.serialNumber
         unitSize = ""
 
         try:
-            unitSize = serialNum.split("$")[3]  #slicing through serial number to just the model code "DF48...."
+            # 5610447$18642369$M141000$DF48650G/S/P
+            #slicing through serial number to just the model code "DF48...."
+            unitSize = serialNum.split("$")[3]  
             if unitSize.startswith("ICBDF") or unitSize.startswith("ICBIR"):
                 try:
                     data.unitType = unitSize[0:5]
@@ -236,9 +235,9 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             displayError(4, "Serial string could not be parsed")
             ClearField(selfEntry)                               # Clear entry field
             selfEntry.focus_set()
+            
 
         data.unitSize = unitSize # Save unit size
-
 
         if data.unitSize == 48 or data.unitSize == 60:      # Change the state of MDL2 entry field to normal if unit is 48" or 60"
             MDL2_entry['state'] = "normal"
@@ -252,7 +251,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             displayError(5, "Wrong puma serial number")
             ClearField(selfEntry)  # Clear entry field
             selfEntry.focus_set()
-            return
+            
 
     elif attribute == "MDL1":
         data.MDL1 = selfEntry.get()
@@ -260,7 +259,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             displayError(6, "Wrong MDL serial number")
             ClearField(selfEntry)  # Clear entry field
             selfEntry.focus_set()
-            return
+            
 
     elif attribute == "MDL2":
         data.MDL2 = selfEntry.get()
@@ -268,7 +267,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             displayError(6, "Wrong MDL serial number")
             ClearField(selfEntry)  # Clear entry field
             selfEntry.focus_set()
-            return
+            
 
     else:
         print("Error\nBad entry field")
@@ -278,6 +277,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
     else:
         nextEntry.focus_set()
 
+    # ICB's do not get a PUMA 
     if (data.unitType == "ICBDF" or data.unitType == "ICBIR") and nextEntry == inputField.Puma:
         inputField.MDL1.focus_set()
 
@@ -449,7 +449,7 @@ def doMacro(): #Macro is performed
 
     # Kill labViewIntegration if it's running. This avoids potentially having two instances of this
     # process running in the background
-    subprocess.call([".\\LabViewIntegrationKiller.exe"])
+    # subprocess.call([".\\LabViewIntegrationKiller.exe"])
 
     # Save values so they can be read by the macro
     sotredValues_Path = (".\\Macro\\Stored values.txt")
@@ -464,6 +464,9 @@ def doMacro(): #Macro is performed
 
     # Call a macro to start the test
     print("Calling macro")
+    subprocess.call([".\\Macro\\LabViewIntegration.exe"])
+
+
     """
     These are different ways to call programs    
     # os.chdir('.\\Macro')
@@ -738,9 +741,11 @@ def GUI(): #GUI
     Clear_Bttn = Button(scanFrame, text="Clear fields", command=startOver, bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
     Clear_Bttn.place(relx=0.5, rely=_rely * 9, anchor="center")
 
+    # the submit button calls the submit() but the way the program functions with the scanner
+    # as the main input source the submit() never gets called
     Submit_Bttn = Button(scanFrame, text="Submit", command=lambda: submit(), bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
     Submit_Bttn.place(relx=0.7, rely=_rely*9, anchor="center")
-
+  
     options_Bttn2 = Button(scanFrame, image=optionsImage_Path, bg="#012B7D", relief=RAISED, borderwidth=5, command= lambda:settings(scanFrame))
     options_Bttn2.place(relx=0.938, rely=0.89, anchor="center")
 
