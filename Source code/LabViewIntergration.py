@@ -30,19 +30,26 @@ def locateButton(name):
 def clickRunButton():
     try:
         runButtonLoc = locateButton('runButton.PNG')
-        time.sleep(3)
         if runButtonLoc.x & runButtonLoc.y:
             pyautogui.click(runButtonLoc.x, runButtonLoc.y)        
-        else: #if play button is not available it means that an input box is awaiting input
-            redXMark = locateButton('redXMark.PNG')
-            print(redXMark)
-            if redXMark.x & redXMark.y:
-                pyautogui.click(redXMark.x, redXMark.y)
-
-
-        #if finding and clicking the runButton was successful return 1 else 0
         return 1 
     except:
+        print('=== did not locate run button ===')
+        return 0
+
+def clickXButton():
+    redXMark = locateButton('redXMark.PNG')
+    if redXMark.x & redXMark.y:
+        pyautogui.click(redXMark.x, redXMark.y)
+
+def clickButton(button):
+    try: 
+        button = locateButton(button)
+        if (button.x & button.y):
+            pyautogui.click(button.x, button.y)        
+            return 1 
+    except:
+        print(f'=== did not locate button from picture{button} ===')
         return 0
 
 
@@ -57,25 +64,28 @@ def openStandardTestInterface():
             # call and open the standard Platform.exe
             print(f'trying to open {standardPlatform}')
             subprocess.Popen([standardPlatformAbsPath])
+            time.sleep(12) #this will give the standard interface program to fully load
 
         #once opened bring to foreground
-        bringToForeground("Standard Test Interface")
-        
-        return 1
+        bringWindowToForeground("Standard Test Interface")
     except:
         print('=== Was not able to open the Standard Testing interface ===')
-        return 0
 
 def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=None): 
 
     openStandardTestInterface()
-    if clickRunButton():
+    # if clickRunButton():
+    if clickButton('runButton.PNG'):
          #input data from the GUI
         print('input data from GUI')
         pyautogui.write("serial NUmber", interval=0.25)
+    else:
+        # clickXButton()
+        clickButton('redXMark.PNG')
+        print('play button not visible')
 
 
-def bringToForeground(name = None):
+def bringWindowToForeground(name = None):
     try:
         # hwnd = win32gui.FindWindow("Notepad", None)
         hwnd = win32gui.FindWindow(None, name)
@@ -88,7 +98,6 @@ def bringToForeground(name = None):
             win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
             time.sleep(2)
             # win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL) #brings the program back to original size
-        
     except Exception as e:
         print(e)
 
