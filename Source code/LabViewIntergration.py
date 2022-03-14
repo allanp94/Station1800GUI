@@ -21,7 +21,6 @@ import win32gui,win32con, time
 
 def locateButton(name):
     buttonLoc = os.path.join(os.path.dirname(__file__), name)
-    print(f"picture at location {buttonLoc}")
     #locate picture on screen
     button =  pyautogui.locateOnScreen(buttonLoc)
     location = pyautogui.center(button) #center of the picture
@@ -34,7 +33,7 @@ def clickButton(buttonName):
             pyautogui.click(button.x, button.y)        
             return 1 
     except:
-        print(f'=== did not locate button from picture{button} ===')
+        print(f'=== did not locate button from picture {buttonName} ===')
         return 0
 
 
@@ -49,26 +48,36 @@ def openStandardTestInterface():
             # call and open the standard Platform.exe
             print(f'trying to open {standardPlatform}')
             subprocess.Popen([standardPlatformAbsPath])
-            time.sleep(12) #this will give the standard interface program to fully load
+            time.sleep(20) #this will give the standard interface program time to fully load
 
-        time.sleep(5)
         #once opened bring to foreground
         bringWindowToForeground("Standard Test Interface")
     except:
         print('=== Was not able to open the Standard Testing interface ===')
 
+def inputData(data = None):
+
+    for num in data:
+        pyautogui.write(num, interval=0.10)
+        clickButton('GreenCheckButton.PNG')
+
+    
+
 def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=None): 
+    # data = [badgeNumber, unitSerialNumber, pumaBarcode]
+    data = ['5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC']
 
     openStandardTestInterface()
     # if clickRunButton():
     if clickButton('runButton.PNG'):
          #input data from the GUI
         print('input data from GUI')
-        pyautogui.write("serial NUmber", interval=0.25)
+        inputData(data)
     else:
         # clickXButton()
         clickButton('redXMark.PNG')
         print('play button not visible')
+        LabViewIntergration()
 
 
 def bringWindowToForeground(name):
@@ -78,7 +87,7 @@ def bringWindowToForeground(name):
         if hwnd == 0:
             print('=== Requested window is not open at the moment ===')
         else:
-            print(f'{name} is opening{ hwnd}')
+            print(f'{name} is opening {hwnd}')
             win32gui.SetForegroundWindow(hwnd)
             # hwnd = win32gui.GetForegroundWindow()
             win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
