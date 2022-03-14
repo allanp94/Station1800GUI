@@ -12,6 +12,7 @@ import configparser
 from shutil import copyfile
 from ProcessKiller import killProcess
 import win32gui, win32con
+from LabViewIntergration import LabViewIntergration
 
 
 
@@ -274,7 +275,9 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
         print("Error\nBad entry field")
 
     if nextEntry == None:
-        doMacro()
+        # doMacro()
+        LabViewIntergration(data.serialNumber, data.badge, data.puma)
+
     else:
         nextEntry.focus_set()
 
@@ -286,7 +289,9 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
         if (data.unitSize == 48 or data.unitSize == 60):
             nextEntry.focus_set()
         else:                                                   # Otherwise execute macro
-            doMacro()
+            # doMacro()
+            LabViewIntergration(data.serialNumber, data.badge, data.puma)
+
 
 
 
@@ -301,7 +306,8 @@ def submit(): #saving entered values into class variable
         data.MDL2 = inputField.MDL2.get()
     except:
         pass
-    doMacro()
+    # doMacro()
+    LabViewIntergration(data.serialNumber, data.badge, data.puma)
 
 
 def getParametersFrom_ini_File(pathTo_ini_file, *args):
@@ -465,7 +471,7 @@ def doMacro(): #Macro is performed
 
     # Call a macro to start the test
     print("Calling macro")
-    subprocess.call([".\\Macro\\LabViewIntegration.exe"])
+    # subprocess.call([".\\Macro\\LabViewIntegration.exe"])
 
 
     """
@@ -499,16 +505,16 @@ def doMacro(): #Macro is performed
             print(e)
 
 
-    LabView_hwnd = findApplication("Standard Test Interface")
-    try:
-        win32gui.SetForegroundWindow(LabView_hwnd)
-        win32gui.ShowWindow(LabView_hwnd, win32con.SW_MAXIMIZE)
-    except Exception as e:
-        print(e)
+    # LabView_hwnd = findApplication("Standard Test Interface")
+    # try:
+    #     win32gui.SetForegroundWindow(LabView_hwnd)
+    #     win32gui.ShowWindow(LabView_hwnd, win32con.SW_MAXIMIZE)
+    # except Exception as e:
+    #     print(e)
 
 
     print("Executing LabViewIntegration.exe")
-    subprocess.call([".\\Macro\\LabViewIntegration.exe"])#, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True) #, cwd=None, timeout=None)
+    # subprocess.call([".\\Macro\\LabViewIntegration.exe"])#, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True) #, cwd=None, timeout=None)
     print("LabView processed")
 
     # Start MES integration
@@ -519,11 +525,11 @@ def doMacro(): #Macro is performed
     inputField.MDL2["state"] = "disabled"                   # Disable MDL2 input field
 
     print("Bring GUI to front")
-    GUI_hwnd = findApplication("Macro for Station 1800, by Jeyc")
-    try:
-        win32gui.SetForegroundWindow(GUI_hwnd)
-    except Exception as e:
-        print(e)
+    # GUI_hwnd = findApplication("Macro for Station 1800, by Jeyc")
+    # try:
+    #     win32gui.SetForegroundWindow(GUI_hwnd)
+    # except Exception as e:
+    #     print(e)
 
 
     # RiseGUI()                                               # Bring GUI to front again
@@ -532,11 +538,11 @@ def doMacro(): #Macro is performed
     print("GUI up. Clearing entry fields")
     inputField.Serial.focus_set()                           # Set focus on serial input field
 
-    workingTime.lastScan = time.perf_counter()              # Taking time after each unit done
+    # workingTime.lastScan = time.perf_counter()              # Taking time after each unit done
 
-    if workingTime.lastScan - workingTime.clockIn > 28800:  #logout after 8 hours
-        messagebox.showwarning("Shift Over", "Your shift for the day is over, bye")
-        Logout(loginFrame)
+    # if workingTime.lastScan - workingTime.clockIn > 28800:  #logout after 8 hours
+    #     messagebox.showwarning("Shift Over", "Your shift for the day is over, bye")
+    #     Logout(loginFrame)
 
 
 ###################################################################################################################

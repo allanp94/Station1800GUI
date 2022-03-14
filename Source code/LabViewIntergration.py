@@ -64,20 +64,20 @@ def inputData(data = None):
     
 
 def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=None): 
-    # data = [badgeNumber, unitSerialNumber, pumaBarcode]
-    data = ['5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC']
-
-    openStandardTestInterface()
-    # if clickRunButton():
-    if clickButton('runButton.PNG'):
-         #input data from the GUI
-        print('input data from GUI')
-        inputData(data)
-    else:
-        # clickXButton()
-        clickButton('redXMark.PNG')
-        print('play button not visible')
-        LabViewIntergration()
+    data = [badgeNumber, unitSerialNumber, pumaBarcode]
+    # data = ['5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC']
+    print(data)
+    # openStandardTestInterface()
+    # # if clickRunButton():
+    # if clickButton('runButton.PNG'):
+    #      #input data from the GUI
+    #     print('input data from GUI')
+    #     inputData(data)
+    # else:
+    #     # clickXButton()
+    #     clickButton('redXMark.PNG')
+    #     print('play button not visible')
+    #     LabViewIntergration()
 
 
 def bringWindowToForeground(name):
