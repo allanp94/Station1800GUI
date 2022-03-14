@@ -23,28 +23,13 @@ def locateButton(name):
     buttonLoc = os.path.join(os.path.dirname(__file__), name)
     print(f"picture at location {buttonLoc}")
     #locate picture on screen
-    button = pyautogui.locateOnScreen(buttonLoc)
+    button =  pyautogui.locateOnScreen(buttonLoc)
     location = pyautogui.center(button) #center of the picture
     return location
 
-def clickRunButton():
-    try:
-        runButtonLoc = locateButton('runButton.PNG')
-        if runButtonLoc.x & runButtonLoc.y:
-            pyautogui.click(runButtonLoc.x, runButtonLoc.y)        
-        return 1 
-    except:
-        print('=== did not locate run button ===')
-        return 0
-
-def clickXButton():
-    redXMark = locateButton('redXMark.PNG')
-    if redXMark.x & redXMark.y:
-        pyautogui.click(redXMark.x, redXMark.y)
-
-def clickButton(button):
+def clickButton(buttonName):
     try: 
-        button = locateButton(button)
+        button = locateButton(buttonName)
         if (button.x & button.y):
             pyautogui.click(button.x, button.y)        
             return 1 
@@ -66,6 +51,7 @@ def openStandardTestInterface():
             subprocess.Popen([standardPlatformAbsPath])
             time.sleep(12) #this will give the standard interface program to fully load
 
+        time.sleep(5)
         #once opened bring to foreground
         bringWindowToForeground("Standard Test Interface")
     except:
@@ -85,7 +71,7 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
         print('play button not visible')
 
 
-def bringWindowToForeground(name = None):
+def bringWindowToForeground(name):
     try:
         # hwnd = win32gui.FindWindow("Notepad", None)
         hwnd = win32gui.FindWindow(None, name)
