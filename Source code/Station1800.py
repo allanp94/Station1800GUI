@@ -276,7 +276,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
 
     if nextEntry == None:
         # doMacro()
-        LabViewIntergration(data.serialNumber, data.badge, data.puma)
+        LabViewIntergration(data.badge, data.serialNumber, data.puma)
 
     else:
         nextEntry.focus_set()
@@ -290,7 +290,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             nextEntry.focus_set()
         else:                                                   # Otherwise execute macro
             # doMacro()
-            LabViewIntergration(data.serialNumber, data.badge, data.puma)
+            LabViewIntergration(data.badge, data.serialNumber, data.puma)
 
 
 
@@ -307,7 +307,7 @@ def submit(): #saving entered values into class variable
     except:
         pass
     # doMacro()
-    LabViewIntergration(data.serialNumber, data.badge, data.puma)
+    LabViewIntergration(data.badge, data.serialNumber, data.puma)
 
 
 def getParametersFrom_ini_File(pathTo_ini_file, *args):
@@ -442,7 +442,7 @@ def saveSettings(previousFrame):
     raise_frame(previousFrame)
 
 def startOver():
-    subprocess.call([".\\LabViewIntegrationKiller.exe"])
+    # subprocess.call([".\\LabViewIntegrationKiller.exe"])
     clearUnitEntryFieldsAndWipeOutData()                    # Clear entry fields and data stored
     inputField.Puma["state"] = "disabled"                   # Disable Puma input field
     inputField.MDL2["state"] = "disabled"                   # Disable MDL2 input field
