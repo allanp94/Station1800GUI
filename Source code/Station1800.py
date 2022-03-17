@@ -276,7 +276,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
 
     if nextEntry == None:
         # doMacro()
-        LabViewIntergration(data.badge, data.serialNumber, data.puma)
+        LabViewIntergration( data.serialNumber, data.badge, data.puma)
 
     else:
         nextEntry.focus_set()
@@ -290,7 +290,7 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             nextEntry.focus_set()
         else:                                                   # Otherwise execute macro
             # doMacro()
-            LabViewIntergration(data.badge, data.serialNumber, data.puma)
+            LabViewIntergration(data.serialNumber, data.badge,  data.puma)
 
 
 
@@ -307,7 +307,7 @@ def submit(): #saving entered values into class variable
     except:
         pass
     # doMacro()
-    LabViewIntergration(data.badge, data.serialNumber, data.puma)
+    LabViewIntergration(data.serialNumber, data.badge,  data.puma)
 
 
 def getParametersFrom_ini_File(pathTo_ini_file, *args):

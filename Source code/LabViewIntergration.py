@@ -41,10 +41,12 @@ def openStandardTestInterface():
     except:
         print('=== Was not able to open the Standard Testing interface ===')
 
+#inputs all the data in the pop-up window
 def inputData(data = None):
     for num in data:
         pyautogui.write(num, interval=0.10)
         clickButton('GreenCheckButton.PNG')
+        time.sleep(1) #this keeps the data from being cut during the write process
 
 def bringWindowToForeground(name):
     try:
@@ -75,13 +77,6 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
         if clickButton('redXMark.PNG'):
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
         else:
-            print('labview was not processed correctly --- redXMark was not found')
-
-
-
-
-
-
-
+            print('labview was not processed correctly --- redXMark and runButton was not found')
 
 # LabViewIntergration()
