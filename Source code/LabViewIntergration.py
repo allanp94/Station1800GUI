@@ -1,15 +1,34 @@
+from ast import Not
 import pyautogui
 import os
 from ProcessKiller import process_exists
 import subprocess
 import win32gui,win32con, time
 
+#global dictionary set for the button locations
+buttonLocations = {
+    'GreenCheckButton.PNG': None, 
+    'runButton.PNG': None,
+    'redXMark.PNG': None
+}
+
+
+
+
 #gets the img file location, locates the image on screen, returns center of location
 def locateButton(name):
-    buttonLoc = os.path.join(os.path.dirname(__file__), '.', 'img', name)
-    button =  pyautogui.locateOnScreen(buttonLoc) #locate picture on screen
-    location = pyautogui.center(button) #center of the picture
-    return location
+    if name in buttonLocations:
+        print(buttonLocations)
+
+        return buttonLocations[name]
+    else:
+        buttonLoc = os.path.join(os.path.dirname(__file__), '.', 'img', name)
+        button =  pyautogui.locateOnScreen(buttonLoc) #locate picture on screen
+        location = pyautogui.center(button) #center of the picture
+        buttonLocations[name] = location
+        print(buttonLocations)
+
+        return location
 
 #gets button file name, locates the center, and clicks on center
 def clickButton(buttonName):
@@ -22,7 +41,7 @@ def clickButton(buttonName):
         print(f'=== did not locate button from picture {buttonName} ===')
         return 0
 
-
+#function that checks to see if the Standard platform executable is running
 def openStandardTestInterface():
     try:
         standardPlatform = 'Standard Platform.exe'
@@ -47,7 +66,9 @@ def inputData(data = None):
         pyautogui.write(num, interval=0.10)
         clickButton('GreenCheckButton.PNG')
         time.sleep(1) #this keeps the data from being cut during the write process
+    clickButton('GreenCheckButton.PNG')
 
+#if application passed is open then it brings it to the foreground
 def bringWindowToForeground(name):
     try:
         hwnd = win32gui.FindWindow(None, name)
@@ -78,5 +99,7 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
         else:
             print('labview was not processed correctly --- redXMark and runButton was not found')
+            return 0
+    
 
-# LabViewIntergration()
+LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
