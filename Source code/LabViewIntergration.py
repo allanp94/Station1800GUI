@@ -1,16 +1,15 @@
 from ast import Not
+from email import message
 import pyautogui
 import os
 from ProcessKiller import process_exists
 import subprocess
 import win32gui,win32con, time
+from tkinter import messagebox
+
 
 #global dictionary set for the button locations
-buttonLocations = {
-    'GreenCheckButton.PNG': None, 
-    'runButton.PNG': None,
-    'redXMark.PNG': None
-}
+buttonLocations = {}
 
 
 
@@ -19,7 +18,6 @@ buttonLocations = {
 def locateButton(name):
     if name in buttonLocations:
         print(buttonLocations)
-
         return buttonLocations[name]
     else:
         buttonLoc = os.path.join(os.path.dirname(__file__), '.', 'img', name)
@@ -27,7 +25,6 @@ def locateButton(name):
         location = pyautogui.center(button) #center of the picture
         buttonLocations[name] = location
         print(buttonLocations)
-
         return location
 
 #gets button file name, locates the center, and clicks on center
@@ -95,11 +92,24 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
         inputData(data)
     else:
         print('play button not visible')
+        #if red X mark exists then start over the test
         if clickButton('redXMark.PNG'):
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
         else:
-            print('labview was not processed correctly --- redXMark and runButton was not found')
-            return 0
+            print('redXMark and runButton was not found')
+    time.sleep(5)#wait for the program to complete
+    if clickButton('testPassed.PNG'):
+        print('test passed')
+        return 1
+    elif clickButton('testFailed.PNG'):
+        print('test failed')
+        return 0
+    elif clickButton('setAction.PNG'):
+        messagebox.showwarning("Warning", 
+        "Make sure that there is a magnet/RFID tag present")
+        response = messagebox.askyesno('Yes|No', 'Do you want to proceed?')
+        print(response)
+
     
 
 LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
