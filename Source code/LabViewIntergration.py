@@ -12,19 +12,16 @@ from tkinter import messagebox
 buttonLocations = {}
 
 
-
-
 #gets the img file location, locates the image on screen, returns center of location
 def locateButton(name):
+    #if the button has already been searched for then you dont need to look for it's location again
     if name in buttonLocations:
-        print(buttonLocations)
         return buttonLocations[name]
     else:
         buttonLoc = os.path.join(os.path.dirname(__file__), '.', 'img', name)
         button =  pyautogui.locateOnScreen(buttonLoc) #locate picture on screen
         location = pyautogui.center(button) #center of the picture
-        buttonLocations[name] = location
-        print(buttonLocations)
+        buttonLocations[name] = location #save location for future use
         return location
 
 #gets button file name, locates the center, and clicks on center
@@ -50,7 +47,7 @@ def openStandardTestInterface():
             # call and open the standard Platform.exe
             print(f'trying to open {standardPlatform}')
             subprocess.Popen([standardPlatformAbsPath])
-            time.sleep(20) #this will give the standard interface program time to fully load
+            time.sleep(25) #this will give the standard interface program time to fully load
 
         #once opened bring to foreground
         bringWindowToForeground("Standard Test Interface")
@@ -82,10 +79,8 @@ def bringWindowToForeground(name):
 
 def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=None): 
     data = [badgeNumber, unitSerialNumber, pumaBarcode]
-    # data = ['5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC']
     print(data)
     openStandardTestInterface()
-    # if clickRunButton():
     if clickButton('runButton.PNG'):
          #input data from the GUI
         print('input data from GUI')
@@ -97,19 +92,34 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
         else:
             print('redXMark and runButton was not found')
-    time.sleep(5)#wait for the program to complete
+    time.sleep(20)#wait for the program to complete
     if clickButton('testPassed.PNG'):
         print('test passed')
         return 1
     elif clickButton('testFailed.PNG'):
         print('test failed')
         return 0
-    elif clickButton('setAction.PNG'):
+    elif clickButton('abort.PNG'):
         messagebox.showwarning("Warning", 
-        "Make sure that there is a magnet/RFID tag present")
-        response = messagebox.askyesno('Yes|No', 'Do you want to proceed?')
-        print(response)
-
-    
+        "Make sure that there is a magnet/RFID tag at the back of the unit")
+        response = messagebox.askyesno('Yes|No', 
+        'READY TO RESTART THE TEST?')
+        if response: 
+            pyautogui.click(700,50)
+            clickButton('abort.PNG')
+            time.sleep(3)
+            LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
+        elif not response:
+            messagebox.showwarning("Warning", 
+            "Terminating test --> restart test manually")
+            print('not response loc')
+            return 0
+    else: 
+        #if non of the buttons where found then there is a different issue with the 
+        #program, perhaps the operator interrupted the process
+        messagebox.showwarning("Warning", 
+            "Terminating test --> restart test manually")
+        print('terminating')
+        return 0
 
 LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
