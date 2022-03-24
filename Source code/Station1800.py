@@ -276,7 +276,8 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
 
     if nextEntry == None:
         # doMacro()
-        LabViewIntergration( data.serialNumber, data.badge, data.puma)
+        if LabViewIntergration(data.serialNumber, data.badge,  data.puma):
+            driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
 
     else:
         nextEntry.focus_set()
@@ -290,7 +291,9 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             nextEntry.focus_set()
         else:                                                   # Otherwise execute macro
             # doMacro()
-            LabViewIntergration(data.serialNumber, data.badge,  data.puma)
+            if LabViewIntergration(data.serialNumber, data.badge,  data.puma):
+                driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
+
 
 
 
@@ -307,7 +310,9 @@ def submit(): #saving entered values into class variable
     except:
         pass
     # doMacro()
-    LabViewIntergration(data.serialNumber, data.badge,  data.puma)
+    if LabViewIntergration(data.serialNumber, data.badge,  data.puma):
+        driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
+
 
 
 def getParametersFrom_ini_File(pathTo_ini_file, *args):
@@ -449,7 +454,41 @@ def startOver():
 
     inputField.Serial.focus_set()                           # Set focus on serial input field
 
+def nextUnitPrep():
+    clearUnitEntryFieldsAndWipeOutData()                    # Clear entry fields and data stored
+    inputField.Puma["state"] = "disabled"                   # Disable Puma input field
+    inputField.MDL2["state"] = "disabled"                   # Disable MDL2 input field
 
+    print("Bring GUI to front")
+    GUI_hwnd = findApplication("Macro for Station 1800, by Jeyc")
+    try:
+        win32gui.SetForegroundWindow(GUI_hwnd)
+    except Exception as e:
+        print(e)
+
+    RiseGUI()                                               # Bring GUI to front again
+
+    print("GUI up. Clearing entry fields")
+    inputField.Serial.focus_set()   
+
+def findApplication (applicationName):
+        """
+        This function returns the application handle of a program running in your computer
+
+        For example, assume that you have Notepad open and you would like to get the handle of this program so you can
+        interact with it (bring to front, maximize, etc). you would use this application in the following way
+
+        appHndl = findApplication("Untitled - Notepad")
+        try:
+            win32gui.SetForegroundWindow(appHndl)
+        except:
+            print("Couldn't bring Notepad to the front of your screen")
+        """
+
+        try:
+            return win32gui.FindWindow(None, applicationName)
+        except Exception as e:
+            print(e)
 
 
 def doMacro(): #Macro is performed
@@ -485,26 +524,6 @@ def doMacro(): #Macro is performed
     # subprocess.run([".\\Macro\\LabViewIntegration.exe"])
     """
 
-    def findApplication (applicationName):
-        """
-        This function returns the application handle of a program running in your computer
-
-        For example, assume that you have Notepad open and you would like to get the handle of this program so you can
-        interact with it (bring to front, maximize, etc). you would use this application in the following way
-
-        appHndl = findApplication("Untitled - Notepad")
-        try:
-            win32gui.SetForegroundWindow(appHndl)
-        except:
-            print("Couldn't bring Notepad to the front of your screen")
-        """
-
-        try:
-            return win32gui.FindWindow(None, applicationName)
-        except Exception as e:
-            print(e)
-
-
     # LabView_hwnd = findApplication("Standard Test Interface")
     # try:
     #     win32gui.SetForegroundWindow(LabView_hwnd)
@@ -525,24 +544,19 @@ def doMacro(): #Macro is performed
     inputField.MDL2["state"] = "disabled"                   # Disable MDL2 input field
 
     print("Bring GUI to front")
-    # GUI_hwnd = findApplication("Macro for Station 1800, by Jeyc")
-    # try:
-    #     win32gui.SetForegroundWindow(GUI_hwnd)
-    # except Exception as e:
-    #     print(e)
+    GUI_hwnd = findApplication("Macro for Station 1800, by Jeyc")
+    try:
+        win32gui.SetForegroundWindow(GUI_hwnd)
+    except Exception as e:
+        print(e)
 
 
-    # RiseGUI()                                               # Bring GUI to front again
+    RiseGUI()                                               # Bring GUI to front again
 
 
     print("GUI up. Clearing entry fields")
     inputField.Serial.focus_set()                           # Set focus on serial input field
 
-    # workingTime.lastScan = time.perf_counter()              # Taking time after each unit done
-
-    # if workingTime.lastScan - workingTime.clockIn > 28800:  #logout after 8 hours
-    #     messagebox.showwarning("Shift Over", "Your shift for the day is over, bye")
-    #     Logout(loginFrame)
 
 
 ###################################################################################################################
@@ -771,7 +785,6 @@ if __name__ == "__main__":
     inputField = inputField(None, None, None, None, None, None, None, None, None, None, None)
     macroSettings = settingsData("", "", "", "","", "", "", "")
     driver = driver(None)
-    workingTime = _time(0, 0)
 
 
     # Create the settings file that the macro will use for the LabViewIntegration

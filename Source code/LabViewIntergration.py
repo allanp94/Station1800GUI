@@ -112,14 +112,12 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
         elif not response:
             messagebox.showwarning("Warning", 
             "Terminating test --> restart test manually")
-            print('not response loc')
             return 0
     else: 
         #if non of the buttons where found then there is a different issue with the 
         #program, perhaps the operator interrupted the process
         messagebox.showwarning("Warning", 
             "Terminating test --> restart test manually")
-        print('terminating')
         return 0
 
-LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
+# LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
