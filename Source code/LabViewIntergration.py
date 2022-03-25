@@ -1,5 +1,3 @@
-from ast import Not
-from email import message
 import pyautogui
 import os
 from ProcessKiller import process_exists
@@ -39,7 +37,12 @@ def clickButton(buttonName):
 def openStandardTestInterface():
     try:
         standardPlatform = 'Standard Platform.exe'
+        # test path
         standardPlatformAbsPath = r'C:\Users\schuyler.wulff\Desktop\D1800\Standard Platform.exe'
+
+        # actual path
+        # standardPlatformAbsPath =r'C:\D1800\Standard Platform.exe'
+
         # check to see if the RFID standard platform program is running 
         if process_exists(standardPlatform):
             print("Standard Platform.exe is running")
@@ -57,7 +60,7 @@ def openStandardTestInterface():
 #inputs all the data in the pop-up window
 def inputData(data = None):
     for num in data:
-        pyautogui.write(num, interval=0.10)
+        pyautogui.write(num, interval=0.25)
         clickButton('GreenCheckButton.PNG')
         time.sleep(1) #this keeps the data from being cut during the write process
     clickButton('GreenCheckButton.PNG')
@@ -91,7 +94,9 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
         if clickButton('redXMark.PNG'):
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
         else:
-            print('redXMark and runButton was not found')
+            print('redXMark and runButton was not found -- trying again')
+            LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
+
     time.sleep(20)#wait for the program to complete
     if clickButton('testPassed.PNG'):
         print('test passed')

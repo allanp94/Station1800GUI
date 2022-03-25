@@ -278,7 +278,10 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
         # doMacro()
         if LabViewIntergration(data.serialNumber, data.badge,  data.puma):
             driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
-
+        else:
+            print('standard test interface test failed -- line 282')
+            messagebox.showwarning("Warning", 
+            "TEST FAILED -- clear input fields and scan items again")
     else:
         nextEntry.focus_set()
 
@@ -293,7 +296,10 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
             # doMacro()
             if LabViewIntergration(data.serialNumber, data.badge,  data.puma):
                 driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
-
+            else:
+                print('standard test interface test failed -- line 300')
+                messagebox.showwarning("Warning", 
+                "TEST FAILED -- clear input fields and scan items again")
 
 
 
@@ -311,7 +317,12 @@ def submit(): #saving entered values into class variable
         pass
     # doMacro()
     if LabViewIntergration(data.serialNumber, data.badge,  data.puma):
-        driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
+        # MES Integration
+        driver.driver = MESWork(data, driver.driver)            # Call driver and input data  
+    else:
+        print('standard test interface test failed -- line 322')
+        messagebox.showwarning("Warning", 
+        "TEST FAILED -- clear input fields and scan items again")
 
 
 
