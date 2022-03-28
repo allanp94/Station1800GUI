@@ -66,7 +66,7 @@ def inputData(data = None):
     clickButton('GreenCheckButton.PNG')
 
 #if application passed is open then it brings it to the foreground
-def bringWindowToForeground(name):
+def bringWindowToForeground(name, maximize=True):
     try:
         hwnd = win32gui.FindWindow(None, name)
         if hwnd == 0:
@@ -74,7 +74,10 @@ def bringWindowToForeground(name):
         else:
             print(f'{name} is opening {hwnd}')
             win32gui.SetForegroundWindow(hwnd)
-            win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
+            if (maximize):
+                win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
+            else:
+                win32gui.ShowWindow(hwnd, win32con.SW_NORMAL)
             time.sleep(2)
     except Exception as e:
         print(e)

@@ -7,19 +7,12 @@ from tkinter import filedialog
 from MESintegration import MESLogIn
 from MESintegration import MESWork
 from MESintegration import MESLogout
-import time
 import configparser
 from shutil import copyfile
 from ProcessKiller import killProcess
 import win32gui, win32con
 from LabViewIntergration import LabViewIntergration
 
-
-
-class _time:
-    def __init__(self, clockIn, lastScan):
-        self.clockIn = clockIn
-        self.lastScan = lastScan
 
 class data:
     def __init__(self, badge, serialNumber, puma, MDL1, MDL2, unitSize, unitType):
