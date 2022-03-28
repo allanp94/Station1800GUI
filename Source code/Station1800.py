@@ -10,7 +10,7 @@ from MESintegration import MESLogout
 import configparser
 from shutil import copyfile
 from ProcessKiller import killProcess
-import win32gui, win32con
+import win32gui
 from LabViewIntergration import LabViewIntergration
 
 

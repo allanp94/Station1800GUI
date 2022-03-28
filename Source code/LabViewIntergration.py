@@ -50,7 +50,7 @@ def openStandardTestInterface():
             # call and open the standard Platform.exe
             print(f'trying to open {standardPlatform}')
             subprocess.Popen([standardPlatformAbsPath])
-            time.sleep(25) #this will give the standard interface program time to fully load
+            time.sleep(35) #this will give the standard interface program time to fully load
 
         #once opened bring to foreground
         bringWindowToForeground("Standard Test Interface")
@@ -60,7 +60,7 @@ def openStandardTestInterface():
 #inputs all the data in the pop-up window
 def inputData(data = None):
     for num in data:
-        pyautogui.write(num, interval=0.25)
+        pyautogui.write(num, interval=0.18)
         clickButton('GreenCheckButton.PNG')
         time.sleep(1) #this keeps the data from being cut during the write process
     clickButton('GreenCheckButton.PNG')
@@ -108,6 +108,7 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
         print('test failed')
         return 0
     elif clickButton('abort.PNG'):
+        bringWindowToForeground("Macro for Station 1800, by Jeyc", False)
         messagebox.showwarning("Warning", 
         "Make sure that there is a magnet/RFID tag at the back of the unit")
         response = messagebox.askyesno('Yes|No', 
@@ -118,12 +119,14 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
             time.sleep(3)
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
         elif not response:
+            bringWindowToForeground("Macro for Station 1800, by Jeyc", False)
             messagebox.showwarning("Warning", 
             "Terminating test --> restart test manually")
             return 0
     else: 
         #if non of the buttons where found then there is a different issue with the 
         #program, perhaps the operator interrupted the process
+        bringWindowToForeground("Macro for Station 1800, by Jeyc", False)
         messagebox.showwarning("Warning", 
             "Terminating test --> restart test manually")
         return 0
