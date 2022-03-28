@@ -791,32 +791,32 @@ if __name__ == "__main__":
     driver = driver(None)
 
 
-    # Create the settings file that the macro will use for the LabViewIntegration
-    macroSettings_Path = ".\\Macro\\Macro Settings.ini"
-    if not os.path.isfile(macroSettings_Path):
+    # # Create the settings file that the macro will use for the LabViewIntegration
+    # macroSettings_Path = ".\\Macro\\Macro Settings.ini"
+    # if not os.path.isfile(macroSettings_Path):
 
-        # Create settings file
-        macroSettings = configparser.ConfigParser()
+    #     # Create settings file
+    #     macroSettings = configparser.ConfigParser()
 
-        # ImagePaths
-        macroSettings["ImagePaths"] =   {
-                                        "runButton": "Macro image files\RunButton.jpg",
-                                        "greenCheckButton": "Macro image files\GreenCheckButton.jpg"
-                                        }
+    #     # ImagePaths
+    #     macroSettings["ImagePaths"] =   {
+    #                                     "runButton": "Macro image files\RunButton.jpg",
+    #                                     "greenCheckButton": "Macro image files\GreenCheckButton.jpg"
+    #                                     }
 
-        # ImageTolerances
-        macroSettings["ImageTolerances"] = {}
-        macroSettings["ImageTolerances"]["runButtonTolerance"] = "0.7"
-        macroSettings["ImageTolerances"]["greenCheckButtonTolerance"] = "0.7"
+    #     # ImageTolerances
+    #     macroSettings["ImageTolerances"] = {}
+    #     macroSettings["ImageTolerances"]["runButtonTolerance"] = "0.7"
+    #     macroSettings["ImageTolerances"]["greenCheckButtonTolerance"] = "0.7"
 
-        # Miscellaneous
-        macroSettings["Miscellaneous"] = {}
-        macroSettings["Miscellaneous"]["waitMultiplier"] = "1"
-        macroSettings["Miscellaneous"]["testFinishedKeyWord"] = "Test Complete..."
+    #     # Miscellaneous
+    #     macroSettings["Miscellaneous"] = {}
+    #     macroSettings["Miscellaneous"]["waitMultiplier"] = "1"
+    #     macroSettings["Miscellaneous"]["testFinishedKeyWord"] = "Test Complete..."
 
-        # save to a file
-        with open(macroSettings_Path, 'w') as configfile:
-            macroSettings.write(configfile)
+    #     # save to a file
+    #     with open(macroSettings_Path, 'w') as configfile:
+    #         macroSettings.write(configfile)
 
     # Kill any Chrome process
     killProcess("CHROME.EXE")
