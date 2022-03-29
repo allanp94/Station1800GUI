@@ -295,8 +295,6 @@ def GoToNextEntry(selfEntry, attribute, nextEntry=None, MDL2_entry=None):
                 "TEST FAILED -- clear input fields and scan items again")
 
 
-
-
 def submit(): #saving entered values into class variable
     data.serialNumber = inputField.Serial.get()
     try:
@@ -318,144 +316,10 @@ def submit(): #saving entered values into class variable
         "TEST FAILED -- clear input fields and scan items again")
 
 
-
-def getParametersFrom_ini_File(pathTo_ini_file, *args):
-    """
-    Assume a .ini file of the form:
-
-    [people]
-    Peter = Not cool
-    Jeyc = Cool dude
-
-    [countries]
-    Venezuela = Tamos mal
-    Denmark = Rich
-
-
-
-    This function retrieves a value (or values), from a .ini file. The inputs to this function are:
-
-        pathTo_ini_file: The path to the .ini file i.e.: "C:\\Users\\This is my ini file.ini"
-
-        *args: a list (or lists), containing the parent and the child of the value you want to return
-        i.e.: ["people", "Peter"], ["countries", "Denmark"]
-
-
-    This function returns a list with the wanted values pulled from the .ini file
-    i.e.: ["Not cool", "Rich"]
-
-    """
-    parameters = []
-
-    fileConfig = configparser.ConfigParser()
-    fileConfig.read(pathTo_ini_file)
-
-    for arg in args:
-        parameters.append(fileConfig.get(arg[0], arg[1]))
-
-    return parameters
-
-
-def saveParametersTo_ini_File(pathTo_ini_file, *args):
-    """
-    This function updates an .ini file with the new parameters fed. If the ini file doesn't exist, it will create it.
-    The inputs to this function are:
-
-        pathTo_ini_file: The path to the .ini file i.e.: "C:\\Users\\This is my ini file.ini"
-
-        *args: a list (or lists), containing the parent, child, and new value you want for this tag.
-
-    Example:
-    Assume you have a .ini file of the form:
-
-    [people]
-    Peter = Not cool
-    Jeyc = Cool dude
-
-    [countries]
-    Venezuela = Tamos mal
-    Denmark = Rich
-
-    and want to update the value for Peter to "He aight", and Venezuela to "Seguimos mal". All you have to do is input
-    the path to the .ini file and a list(s) containing the parent, child, and new value, i.e.:
-
-        saveParametersTo_ini_File("C:\\Users\\This is my ini file.ini", ["people", "Peter", "He aight"], ["countries", "Venezuela", "Seguimos mal"])
-
-    you should see your .ini file updated to:
-
-    [people]
-    Peter = He aight
-    Jeyc = Cool dude
-
-    [countries]
-    Venezuela = Seguimos mal
-    Denmark = Rich
-    """
-
-    # Create config file
-    iniFileConfig = configparser.ConfigParser()
-
-    # Check to see if .ini file exists, if it does read it
-    if os.path.isfile(pathTo_ini_file):
-        # Create ini file
-        iniFileConfig.read(pathTo_ini_file)
-
-    # Update values
-    for arg in args:
-        if arg[2] != None:# or arg[2] != "" or arg[2] != "None":
-            iniFileConfig.set(arg[0], arg[1], str(arg[2]))
-
-    # save file
-    with open(pathTo_ini_file, 'w') as configfile:
-            iniFileConfig.write(configfile)
-
-
-def settings(selfFrame):
-    global frameBeforeSettings
-    frameBeforeSettings = selfFrame
-    # Read Macro settings and store values
-    settingsFromIni = getParametersFrom_ini_File(".\\Macro\\Macro Settings.ini",
-                                ["ImageTolerances", "runButtonTolerance"],
-                                ["ImageTolerances", "greenCheckButtonTolerance"],
-                                ["Miscellaneous", "waitMultiplier"],
-                                ["Miscellaneous", "testFinishedKeyWord"])
-
-    macroSettings.runButtonTolerance = settingsFromIni[0]
-    macroSettings.greenCheckButtonTolerance = settingsFromIni[1]
-    macroSettings.waitMultiplier = settingsFromIni[2]
-    macroSettings.testFinishedKeyWord = settingsFromIni[3]
-
-    # Set Entry boxes initial values
-    macroSettings.runButtonTolerance_entryValue.set(macroSettings.runButtonTolerance)
-    macroSettings.greenCheckButtonTolerance_entryValue.set(macroSettings.greenCheckButtonTolerance)
-    macroSettings.waitMultiplier_entryValue.set(macroSettings.waitMultiplier)
-    macroSettings.testFinishedKeyWord_entryValue.set(macroSettings.testFinishedKeyWord)
-
-
-    # Raise settings frame
-    raise_frame(settingsFrame)
-
-
-def saveSettings(previousFrame):
-    # Update ini file with new settings
-    saveParametersTo_ini_File(".\\Macro\\Macro Settings.ini",
-                              ["ImagePaths", "runbutton", inputField.runbttn_image],
-                              ["ImagePaths", "greencheckbutton", inputField.checkbttn_image],
-                              ["ImageTolerances", "runButtonTolerance", inputField.runbttn_tlrnc.get()],
-                              ["ImageTolerances", "greencheckbuttontolerance", inputField.checkbttn_tlrnc.get()],
-                              ["Miscellaneous", "waitmultiplier", inputField.waitMul.get()],
-                              ["Miscellaneous", "testfinishedkeyword", inputField.keyWord.get()])
-
-
-    # Raise settings frame
-    raise_frame(previousFrame)
-
 def startOver():
-    # subprocess.call([".\\LabViewIntegrationKiller.exe"])
     clearUnitEntryFieldsAndWipeOutData()                    # Clear entry fields and data stored
     inputField.Puma["state"] = "disabled"                   # Disable Puma input field
     inputField.MDL2["state"] = "disabled"                   # Disable MDL2 input field
-
     inputField.Serial.focus_set()                           # Set focus on serial input field
 
 def nextUnitPrep():
@@ -495,73 +359,6 @@ def findApplication (applicationName):
             print(e)
 
 
-def doMacro(): #Macro is performed
-
-    # Kill labViewIntegration if it's running. This avoids potentially having two instances of this
-    # process running in the background
-    # subprocess.call([".\\LabViewIntegrationKiller.exe"])
-
-    # Save values so they can be read by the macro
-    sotredValues_Path = (".\\Macro\\Stored values.txt")
-    with open(sotredValues_Path, 'w') as outfile:
-        outfile.write(str(data.badge) + "\n")
-        outfile.write(str(data.unitSize) + "\n")
-        outfile.write(data.unitType + "\n")
-        outfile.write(data.serialNumber + "\n")
-        outfile.write(data.puma + "\n")
-        outfile.write(data.MDL1 + "\n")
-        outfile.write(data.MDL2 + "\n")
-
-    # Call a macro to start the test
-    print("Calling macro")
-    # subprocess.call([".\\Macro\\LabViewIntegration.exe"])
-
-
-    """
-    These are different ways to call programs    
-    # os.chdir('.\\Macro')
-    # os.system('".\\Macro\\LabViewIntegration.exe"')
-    # os.startfile(".\\Macro\\LabViewIntegration.exe")
-    # os.system('".\\Macro\\LabViewIntegration.exe"')
-    # subprocess.call([".\\Macro\\LabViewIntegration.exe"])
-    # subprocess.Popen([".\\Macro\\LabViewIntegration.exe"])
-    # subprocess.run([".\\Macro\\LabViewIntegration.exe"])
-    """
-
-    # LabView_hwnd = findApplication("Standard Test Interface")
-    # try:
-    #     win32gui.SetForegroundWindow(LabView_hwnd)
-    #     win32gui.ShowWindow(LabView_hwnd, win32con.SW_MAXIMIZE)
-    # except Exception as e:
-    #     print(e)
-
-
-    print("Executing LabViewIntegration.exe")
-    # subprocess.call([".\\Macro\\LabViewIntegration.exe"])#, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True) #, cwd=None, timeout=None)
-    print("LabView processed")
-
-    # Start MES integration
-    driver.driver = MESWork(data, driver.driver)            # Call driver and input data                              # MES Integration
-
-    clearUnitEntryFieldsAndWipeOutData()                    # Clear entry fields and data stored
-    inputField.Puma["state"] = "disabled"                   # Disable Puma input field
-    inputField.MDL2["state"] = "disabled"                   # Disable MDL2 input field
-
-    print("Bring GUI to front")
-    GUI_hwnd = findApplication("Macro for Station 1800, by Jeyc")
-    try:
-        win32gui.SetForegroundWindow(GUI_hwnd)
-    except Exception as e:
-        print(e)
-
-
-    RiseGUI()                                               # Bring GUI to front again
-
-
-    print("GUI up. Clearing entry fields")
-    inputField.Serial.focus_set()                           # Set focus on serial input field
-
-
 
 ###################################################################################################################
 ###                                                                                                             ###
@@ -571,7 +368,7 @@ def doMacro(): #Macro is performed
 
 
 def GUI(): #GUI
-    global loginFrame, scanFrame, settingsFrame
+    global loginFrame, scanFrame
     """
     This is the user interface. It contains only the buttons and entry boxes that the user can interact with
     """
@@ -591,8 +388,7 @@ def GUI(): #GUI
     # Place frames
     loginFrame = Frame(window)
     scanFrame = Frame(window)
-    settingsFrame = Frame(window)
-    for frame in (loginFrame, scanFrame, settingsFrame):
+    for frame in (loginFrame, scanFrame):
         frame.grid(row=0, column=0, sticky='news')
 
 
@@ -622,73 +418,6 @@ def GUI(): #GUI
     logIn_Bttn.place(relx=0.5, rely=0.9, anchor="center")
     inputField.Badge.bind('<Return>', lambda event: login(loginFrame, scanFrame, inputField.Badge, inputField.Serial))
 
-    optionsImage_Path = ".\\Media\\options.png"
-    optionsImage_Path = ImageTk.PhotoImage(Image.open(optionsImage_Path))
-    options_Bttn = Button(loginFrame, image=optionsImage_Path, bg="#012B7D", relief=RAISED, borderwidth=5, command= lambda: settings(loginFrame))
-    options_Bttn.place(relx=0.87, rely=0.05)
-
-
-    ###################################################################################################################
-    ###                                         SETTINGS FRAME                                                      ###
-    ###                                                                                                             ###
-    ###                                                                                                             ###
-    ###   Contains the screen where operator can change the Macro settings                                          ###
-    ###                                                                                                             ###
-    ###################################################################################################################
-    options_relx1 = 0.05
-    options_relx2 = 0.55
-    options_relx3 = 0.55
-
-    runButton_Bttn = Button(settingsFrame, text="Choose Run button\nimage...", font=('times', '10'), width=20, relief=RAISED, borderwidth=5, bg="light green", command= lambda: selectImageFile("RunButton"))
-    runButton_Bttn.place(relx=options_relx1, rely=0.1, anchor="w")
-
-    runbttn_tlrnc_LBL = Label(settingsFrame, text="Tolenrance: ", font=('times', '18'))
-    runbttn_tlrnc_LBL.place(relx=options_relx2, rely=0.1, anchor="e")
-    runbttn_tlrnc_LBL2 = Label(settingsFrame, text="Should be a number between 0 and 1. Recommended value: 0.7", font=('times', '10'))
-    runbttn_tlrnc_LBL2.place(relx=options_relx2+.098, rely=0.18, anchor="center")
-
-    macroSettings.runButtonTolerance_entryValue = StringVar()
-    inputField.runbttn_tlrnc = Entry(settingsFrame, textvariable=macroSettings.runButtonTolerance_entryValue, width=4, bg="white", borderwidth=5, font=('times', '18'), justify='center')
-    inputField.runbttn_tlrnc.place(relx=options_relx3, rely=0.1, anchor="w")
-
-
-    checkButton_Bttn = Button(settingsFrame, text="Choose Check button\nimage...", font=('times', '10'), width=20, relief=RAISED, borderwidth=5, bg="light green", command= lambda: selectImageFile("CheckButton"))
-    checkButton_Bttn.place(relx=options_relx1, rely=0.3, anchor="w")
-
-    checkbttn_tlrnc_LBL = Label(settingsFrame, text="Tolenrance: ", font=('times', '18'))
-    checkbttn_tlrnc_LBL.place(relx=options_relx2, rely=0.3, anchor="e")
-    checkbttn_tlrnc_LBL2 = Label(settingsFrame, text="Should be a number between 0 and 1. Recommended value: 0.7", font=('times', '10'))
-    checkbttn_tlrnc_LBL2.place(relx=options_relx2+.098, rely=0.38, anchor="center")
-
-    macroSettings.greenCheckButtonTolerance_entryValue = StringVar()
-    inputField.checkbttn_tlrnc = Entry(settingsFrame, textvariable=macroSettings.greenCheckButtonTolerance_entryValue, width=4, bg="white", borderwidth=5, font=('times', '18'), justify='center')
-    inputField.checkbttn_tlrnc.place(relx=options_relx3, rely=0.3, anchor="w")
-
-
-    waitMultiplier_LBL1 = Label(settingsFrame, text="Macro speed: ", font=('times', '18'))
-    waitMultiplier_LBL1.place(relx=options_relx2, rely=0.5, anchor="e")
-    waitMultiplier_LBL2 = Label(settingsFrame, text="The higher the number, the slower it runs. Recommended value between 1 and 3", font=('times', '10'))
-    waitMultiplier_LBL2.place(relx=options_relx2, rely=0.58, anchor="center")
-
-    macroSettings.waitMultiplier_entryValue = StringVar()
-    inputField.waitMul = Entry(settingsFrame, textvariable=macroSettings.waitMultiplier_entryValue, width=4, bg="white", borderwidth=5, font=('times', '18'), justify='center')
-    inputField.waitMul.place(relx=options_relx3, rely=0.5, anchor="w")
-
-    keyWord_LBL1 = Label(settingsFrame, text="Cue word: ", font=('times', '18'))
-    keyWord_LBL1.place(relx=options_relx2, rely=0.7, anchor="e")
-    keyWord_LBL2 = Label(settingsFrame, text="The program will search for this word. It works as the cue to let it know the test was completed", font=('times', '10'))
-    keyWord_LBL2.place(relx=options_relx2, rely=0.78, anchor="center")
-
-    macroSettings.testFinishedKeyWord_entryValue = StringVar()
-    inputField.keyWord = Entry(settingsFrame, textvariable=macroSettings.testFinishedKeyWord_entryValue, width=20, bg="white", borderwidth=5, font=('times', '18'), justify='left')
-    inputField.keyWord.place(relx=options_relx3, rely=0.7, anchor="w")
-
-
-    cancel_Bttn = Button(settingsFrame, text="Cancel", command=lambda: raise_frame(frameBeforeSettings), bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
-    cancel_Bttn.place(relx=0.3, rely=0.9, anchor="center")
-
-    Save_Bttn = Button(settingsFrame, text="Save", command=lambda: saveSettings(frameBeforeSettings), bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
-    Save_Bttn.place(relx=0.7, rely=0.9, anchor="center")
 
     ###################################################################################################################
     ###                                             SCAN FRAME                                                      ###
@@ -717,8 +446,6 @@ def GUI(): #GUI
     chip_Canvas = Label(scanFrame, image=labelImage)
     chip_Canvas.place(relx=image_Relx, rely=_rely, anchor="w")
 
-
-
     text4 = Label(scanFrame, text= "Scan Puma:", fg="white", bg="#004694", font=('times','25'), justify="right")
     text4.place(relx=text_Relx, rely=_rely*3, anchor="e")
 
@@ -730,8 +457,6 @@ def GUI(): #GUI
     chipImage = ImageTk.PhotoImage(Image.open(".\\Media\\chip.jpg"))
     chip_Canvas = Label(scanFrame, image=chipImage)
     chip_Canvas.place(relx=image_Relx, rely=_rely*3, anchor="w")
-
-
 
     text5 = Label(scanFrame, text= "Scan MDL:", fg="white", bg="#0472A3", font=('times','25'), justify="right")
     text5.place(relx=text_Relx, rely=_rely*5, anchor="e")
@@ -771,14 +496,9 @@ def GUI(): #GUI
     Submit_Bttn = Button(scanFrame, text="Submit", command=lambda: submit(), bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
     Submit_Bttn.place(relx=0.7, rely=_rely*9, anchor="center")
   
-    options_Bttn2 = Button(scanFrame, image=optionsImage_Path, bg="#012B7D", relief=RAISED, borderwidth=5, command= lambda:settings(scanFrame))
-    options_Bttn2.place(relx=0.938, rely=0.89, anchor="center")
 
-
-    # Select Frame 1 as the initial frame
+    # initial frame
     raise_frame(loginFrame, inputField.Badge)
-    # raise_frame(settingsFrame)
-    # raise_frame(scanFrame,inputField.Serial)
 
     window.mainloop()
 
@@ -789,34 +509,6 @@ if __name__ == "__main__":
     inputField = inputField(None, None, None, None, None, None, None, None, None, None, None)
     macroSettings = settingsData("", "", "", "","", "", "", "")
     driver = driver(None)
-
-
-    # # Create the settings file that the macro will use for the LabViewIntegration
-    # macroSettings_Path = ".\\Macro\\Macro Settings.ini"
-    # if not os.path.isfile(macroSettings_Path):
-
-    #     # Create settings file
-    #     macroSettings = configparser.ConfigParser()
-
-    #     # ImagePaths
-    #     macroSettings["ImagePaths"] =   {
-    #                                     "runButton": "Macro image files\RunButton.jpg",
-    #                                     "greenCheckButton": "Macro image files\GreenCheckButton.jpg"
-    #                                     }
-
-    #     # ImageTolerances
-    #     macroSettings["ImageTolerances"] = {}
-    #     macroSettings["ImageTolerances"]["runButtonTolerance"] = "0.7"
-    #     macroSettings["ImageTolerances"]["greenCheckButtonTolerance"] = "0.7"
-
-    #     # Miscellaneous
-    #     macroSettings["Miscellaneous"] = {}
-    #     macroSettings["Miscellaneous"]["waitMultiplier"] = "1"
-    #     macroSettings["Miscellaneous"]["testFinishedKeyWord"] = "Test Complete..."
-
-    #     # save to a file
-    #     with open(macroSettings_Path, 'w') as configfile:
-    #         macroSettings.write(configfile)
 
     # Kill any Chrome process
     killProcess("CHROME.EXE")
