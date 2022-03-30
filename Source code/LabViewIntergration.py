@@ -38,10 +38,10 @@ def openStandardTestInterface():
     try:
         standardPlatform = 'Standard Platform.exe'
         # test path
-        standardPlatformAbsPath = r'C:\Users\schuyler.wulff\Desktop\D1800\Standard Platform.exe'
+        # standardPlatformAbsPath = r'C:\Users\schuyler.wulff\Desktop\D1800\Standard Platform.exe'
 
         # actual path
-        # standardPlatformAbsPath =r'C:\D1800\Standard Platform.exe'
+        standardPlatformAbsPath =r'C:\D1800\Standard Platform.exe'
 
         # check to see if the RFID standard platform program is running 
         if process_exists(standardPlatform):
