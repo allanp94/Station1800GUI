@@ -38,21 +38,6 @@ class inputField:
         self.waitMul = waitMul
         self.keyWord = keyWord
 
-class settingsData:
-    def __init__(self, runButtonTolerance, runButtonTolerance_entryValue,
-                 greenCheckButtonTolerance, greenCheckButtonTolerance_entryValue,
-                 waitMultiplier, waitMultiplier_entryValue,
-                 testFinishedKeyWord, testFinishedKeyWord_entryValue):
-
-        self.runButtonTolerance_entryValue = runButtonTolerance_entryValue
-        self.runButtonTolerance = runButtonTolerance
-        self.greenCheckButtonTolerance = greenCheckButtonTolerance
-        self.greenCheckButtonTolerance_entryValue = greenCheckButtonTolerance_entryValue
-        self.waitMultiplier = waitMultiplier
-        self.waitMultiplier_entryValue = waitMultiplier_entryValue
-        self.testFinishedKeyWord = testFinishedKeyWord
-        self.testFinishedKeyWord_entryValue = testFinishedKeyWord_entryValue
-
 class driver:
     def __init__(self, driver):
         self.driver = driver
@@ -483,18 +468,16 @@ def GUI(): #GUI
     chip_Canvas = Label(scanFrame, image=MDL2Image)
     chip_Canvas.place(relx=image_Relx, rely=_rely*7, anchor="w")
 
-
-
     logOut_Bttn = Button(scanFrame, text="Log out", command=lambda: Logout(loginFrame), bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
     logOut_Bttn.place(relx=0.3, rely=_rely*9, anchor="center")
 
     Clear_Bttn = Button(scanFrame, text="Clear fields", command=startOver, bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
-    Clear_Bttn.place(relx=0.5, rely=_rely * 9, anchor="center")
+    Clear_Bttn.place(relx=0.5, rely=_rely * 9, anchor="center", x=30)
 
     # the submit button calls the submit() but the way the program functions with the scanner
     # as the main input source the submit() never gets called
     Submit_Bttn = Button(scanFrame, text="Submit", command=lambda: submit(), bg="light blue", font=('times', '15'), relief=RAISED, borderwidth=5)
-    Submit_Bttn.place(relx=0.7, rely=_rely*9, anchor="center")
+    Submit_Bttn.place(relx=0.7, rely=_rely*9, anchor="center", x=55)
   
 
     # initial frame
@@ -507,7 +490,6 @@ if __name__ == "__main__":
     # Initialize variables
     data = data("","","","","","","")
     inputField = inputField(None, None, None, None, None, None, None, None, None, None, None)
-    macroSettings = settingsData("", "", "", "","", "", "", "")
     driver = driver(None)
 
     # Kill any Chrome process
