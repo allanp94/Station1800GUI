@@ -22,6 +22,16 @@ def locateButton(name):
         buttonLocations[name] = location #save location for future use
         return location
 
+def locateText(name):
+    try:
+        buttonLoc = os.path.join(os.path.dirname(__file__), '.', 'img', name)
+        button =  pyautogui.locateOnScreen(buttonLoc, confidence=0.7) #locate picture on screen
+        if button:
+            return 1
+    except:
+        print(f'=== could not locate text on screen from {name} ===')
+        return 0
+
 #gets button file name, locates the center, and clicks on center
 def clickButton(buttonName):
     try: 
@@ -101,10 +111,10 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
             LabViewIntergration(badgeNumber, unitSerialNumber, pumaBarcode)
 
     time.sleep(20)#wait for the program to complete
-    if clickButton('testPassed.PNG'):
+    if locateText('testPassed.PNG'):
         print('test passed')
         return 1
-    elif clickButton('testFailed.PNG'):
+    elif locateText('testFailed.PNG'):
         print('test failed')
         return 0
     elif clickButton('abort.PNG'):
@@ -124,7 +134,7 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
             "Terminating test --> restart test manually")
             return 0
     else: 
-        #if non of the buttons where found then there is a different issue with the 
+        #if none of the buttons where found then there is a different issue with the 
         #program, perhaps the operator interrupted the process
         bringWindowToForeground("Macro for Station 1800, by Jeyc", False)
         messagebox.showwarning("Warning", 
