@@ -38,7 +38,7 @@ def LaunchBrowser():
     # import Chrome web driver
 
     listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
-
+    print(listOfChromeDrivers)
     for x in listOfChromeDrivers:
         try:
             driver = webdriver.Chrome(os.path.join(".\\Drivers\\", x))

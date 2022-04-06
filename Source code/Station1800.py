@@ -7,7 +7,6 @@ from tkinter import filedialog
 from MESintegration import MESLogIn
 from MESintegration import MESWork
 from MESintegration import MESLogout
-import configparser
 from shutil import copyfile
 from ProcessKiller import killProcess
 import win32gui

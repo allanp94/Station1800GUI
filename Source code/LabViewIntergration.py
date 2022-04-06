@@ -26,6 +26,7 @@ def locateText(name):
     try:
         buttonLoc = os.path.join(os.path.dirname(__file__), '.', 'img', name)
         button =  pyautogui.locateOnScreen(buttonLoc, confidence=0.7) #locate picture on screen
+        print(f"locateText function button value ==> {button}")
         if button:
             return 1
     except:
@@ -48,10 +49,10 @@ def openStandardTestInterface():
     try:
         standardPlatform = 'Standard Platform.exe'
         # test path
-        # standardPlatformAbsPath = r'C:\Users\schuyler.wulff\Desktop\D1800\Standard Platform.exe'
+        standardPlatformAbsPath = r'C:\Users\schuyler.wulff\Desktop\D1800\Standard Platform.exe'
 
         # actual path
-        standardPlatformAbsPath =r'C:\D1800\Standard Platform.exe'
+        #standardPlatformAbsPath =r'C:\D1800\Standard Platform.exe'
 
         # check to see if the RFID standard platform program is running 
         if process_exists(standardPlatform):
@@ -60,7 +61,7 @@ def openStandardTestInterface():
             # call and open the standard Platform.exe
             print(f'trying to open {standardPlatform}')
             subprocess.Popen([standardPlatformAbsPath])
-            time.sleep(35) #this will give the standard interface program time to fully load
+            time.sleep(25) #this will give the standard interface program time to fully load
 
         #once opened bring to foreground
         bringWindowToForeground("Standard Test Interface")
@@ -141,4 +142,4 @@ def LabViewIntergration(badgeNumber=None, unitSerialNumber=None, pumaBarcode=Non
             "Terminating test --> restart test manually")
         return 0
 
-# LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
+LabViewIntergration('5610447$18642369$M141000$DF48650G/S/P', '9217', '9041664$0006801C7BCC')
