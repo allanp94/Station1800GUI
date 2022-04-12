@@ -50,24 +50,6 @@ def LaunchBrowser():
     exit(0)
 
 
-"""    try:
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get(MESWebSite)
-        return driver
-    except:
-
-        listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
-
-        for x in listOfChromeDrivers:
-            try:
-                driver = webdriver.Chrome(x)
-                driver.get(MESWebSite)
-                return driver
-            except:
-                pass
-        print("None of the drivers worked")"""
-
-
 
 def pressButton(driver, findBy, errorMessage, ID=None, XPath=None):
     if findBy == "ID":
