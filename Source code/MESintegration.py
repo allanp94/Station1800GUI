@@ -7,7 +7,6 @@ from selenium.webdriver.common.keys import Keys
 from tkinter import messagebox
 import time
 import os
-from ProcessKiller import killProcess
 
 webdriver.ChromeOptions().add_argument("--ignore-certificate-errors")
 webdriver.ChromeOptions().add_argument("--no-sandbox")
@@ -186,10 +185,6 @@ def MESWork(data, driver):
             print("Can't reach")
             # Chrome was closed and needs to be relaunched
             print("Chrome was closed and needs to be relaunched")
-
-            # Kill every Chrome process
-            killProcess("CHROME.EXE")
-            killProcess("CHROMEDRIVER.EXE")
 
             # Log in again
             driver = MESLogIn(data)
