@@ -4,7 +4,10 @@ import subprocess
 from MESintegration import MESLogIn
 from MESintegration import MESWork
 from MESintegration import MESLogout
-from shutil import copyfile
+from ProcessKiller import killProcess
+from selenium import webdriver
+
+
 
 
 class Driver:
@@ -40,15 +43,9 @@ openFile("1800.txt")
 print(dataFromFile)
 
 
+killProcess("CHROME.EXE")
+killProcess("CHROMEDRIVER.EXE")
 MESLogIn(dataFromFile)
 
-
-    
-
-
-# if __name__ == "__main__":
-#     # Initialize variables
-#     driver = Driver(None)
-    
 
 
