@@ -7,6 +7,8 @@ from selenium.webdriver.common.keys import Keys
 from tkinter import messagebox
 import time
 import os
+from ProcessKiller import killProcess
+
 
 webdriver.ChromeOptions().add_argument("--ignore-certificate-errors")
 webdriver.ChromeOptions().add_argument("--no-sandbox")
@@ -37,7 +39,7 @@ def LaunchBrowser():
     # import Chrome web driver
 
     listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
-
+    print(listOfChromeDrivers)
     for x in listOfChromeDrivers:
         try:
             driver = webdriver.Chrome(os.path.join(".\\Drivers\\", x))
@@ -165,7 +167,7 @@ def fillEntryBox(driver,findBy, errorMessage, text, ID=None, XPath=None, Class=N
 def MESLogIn(data):
     driver = LaunchBrowser()
     driver = waitForWebsite(driver, "ID", "LogInButton", 10)
-    driver, _ = fillEntryBox(driver, "ID", "Couldn't find id", data.badge, ID="BadgeIDTextBox")
+    driver, _ = fillEntryBox(driver, "ID", "Couldn't find id", data[0], ID="BadgeIDTextBox")
     driver = pressButton(driver, "ID", "Couldn't find login button", ID="LogInButton")
     driver = waitForWebsite(driver, "ID", "T7", 30)
     return driver
@@ -186,6 +188,9 @@ def MESWork(data, driver):
             # Chrome was closed and needs to be relaunched
             print("Chrome was closed and needs to be relaunched")
 
+            killProcess("CHROME.EXE")
+            killProcess("CHROMEDRIVER.EXE")
+
             # Log in again
             driver = MESLogIn(data)
 
@@ -196,7 +201,7 @@ def MESWork(data, driver):
 
 
     # driver = waitForWebsite(driver, "ID", "sampleoverlay", 5)                                                         # No need to check for sample
-    driver,_ = fillEntryBox(driver, "ID", "Couldn't find serial entry box", data.serialNumber, ID="T7")                 # Input serial number
+    driver,_ = fillEntryBox(driver, "ID", "Couldn't find serial entry box", data[1], ID="T7")                 # Input serial number
     driver = pressButton(driver, "XPath", "Couldn't find load button", XPath="/html/body/form/div/div[10]/div[2]/div/div/div[1]/div[1]/div[4]/div/div[2]/div[5]/div[1]/div[4]/div/div/div[1]/div[1]/div[4]/div/div[2]/div/div[1]/div[2]/button")
     driver = waitForWebsite(driver, "ID", "E2frameEmbedPage", 10)
 
@@ -207,18 +212,18 @@ def MESWork(data, driver):
 
 
         if data.unitType == "DF" or data.unitType == "IR":
-            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data.puma, ID="T2")
+            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[2], ID="T2")
             entryBox.send_keys(Keys.RETURN)
             time.sleep(2)
 
 
-        driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data.MDL1, ID="T2")
+        driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[3], ID="T2")
         entryBox.send_keys(Keys.RETURN)
         time.sleep(2)
 
 
-        if data.unitSize == 48 or data.unitSize == 60:
-            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data.MDL2, ID="T2")
+        if data[4]:
+            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[4], ID="T2")
             entryBox.send_keys(Keys.RETURN)
             time.sleep(2)
 
