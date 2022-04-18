@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from tkinter import messagebox
 import time
@@ -162,12 +161,11 @@ def fillEntryBox(driver,findBy, errorMessage, text, ID=None, XPath=None, Class=N
     return driver, x
 
 
-
 #--------------------------------------------------------------------------------------------------------------#
-def MESLogIn(data):
+def MESLogIn(badgeNum):
     driver = LaunchBrowser()
     driver = waitForWebsite(driver, "ID", "LogInButton", 10)
-    driver, _ = fillEntryBox(driver, "ID", "Couldn't find id", data[0], ID="BadgeIDTextBox")
+    driver, _ = fillEntryBox(driver, "ID", "Couldn't find id", badgeNum, ID="BadgeIDTextBox")
     driver = pressButton(driver, "ID", "Couldn't find login button", ID="LogInButton")
     driver = waitForWebsite(driver, "ID", "T7", 30)
     return driver
@@ -183,7 +181,6 @@ def MESWork(data, driver):
     except Exception as e:
 
         if str(e).startswith("Message: chrome not reachable") == True:
-            # if e.startswith("Message: chrome not reachable") == True:
             print("Can't reach")
             # Chrome was closed and needs to be relaunched
             print("Chrome was closed and needs to be relaunched")
@@ -200,28 +197,28 @@ def MESWork(data, driver):
     driver = waitForWebsite(driver, "ID", "T7", 30)
 
 
-    # driver = waitForWebsite(driver, "ID", "sampleoverlay", 5)                                                         # No need to check for sample
-    driver,_ = fillEntryBox(driver, "ID", "Couldn't find serial entry box", data[1], ID="T7")                 # Input serial number
+    driver,_ = fillEntryBox(driver, "ID", "Couldn't find serial entry box", data[1], ID="T7") # Input serial number
     driver = pressButton(driver, "XPath", "Couldn't find load button", XPath="/html/body/form/div/div[10]/div[2]/div/div/div[1]/div[1]/div[4]/div/div[2]/div[5]/div[1]/div[4]/div/div/div[1]/div[1]/div[4]/div/div[2]/div/div[1]/div[2]/button")
     driver = waitForWebsite(driver, "ID", "E2frameEmbedPage", 10)
 
     print("Switch to contentFrame iFrame")
     try:
         driver.switch_to.frame("E2frameEmbedPage")
-        driver = waitForWebsite(driver, "ID", "T2", 10)
+        driver = waitForWebsite(driver, "ID", "T2", 10) #T2 is the "Scan Vendor Barcode" input box
 
-
-        if data.unitType == "DF" or data.unitType == "IR":
+        # check to see if unit has a KCV requirement for puma
+        if 'DF' in data[1] or 'IR' in data[1]:
             driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[2], ID="T2")
             entryBox.send_keys(Keys.RETURN)
             time.sleep(2)
 
-
+        # MDL KVC requirement 
         driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[3], ID="T2")
         entryBox.send_keys(Keys.RETURN)
         time.sleep(2)
 
-
+        # if data[4] is true, means that two MDLs were scanned in by the user 
+        # and that the present unit is a 48' or 60' and has two MDL KCV requirements
         if data[4]:
             driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[4], ID="T2")
             entryBox.send_keys(Keys.RETURN)
@@ -230,15 +227,14 @@ def MESWork(data, driver):
     except:
         # Unit already scanned
         driver = waitForWebsite(driver, "Class", "skfli sklc skc lblBackflushComplete_skc", 10)
-
+        driver = pressButton(driver, "Class", "Couldn't find scan for test button", "skfli sklc skc lblBackflushComplete_skc" )
 
     driver.switch_to.default_content()
     return driver
 
-
-#--------------------------------------------------------------------------------------------------------------#
-def MESLogout(driver):
-    driver.quit()
+# #--------------------------------------------------------------------------------------------------------------#
+# def MESLogout(driver):
+#     driver.quit()
 
 
 if __name__ == "__main__":
