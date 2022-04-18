@@ -1,7 +1,6 @@
 from operator import indexOf
 from MESintegration import MESLogIn
 from MESintegration import MESWork
-from MESintegration import MESLogout
 from ProcessKiller import killProcess
 
 # D1800
@@ -23,10 +22,10 @@ def openFile(name):
 
 
 #read values from file for testing purpose
-# openFile("1800.txt")
+openFile("1800.txt")
 
 #txt file location on deployment machine
-openFile("C:\LOGS\1800MESIntergrations.txt")
+# openFile("C:\LOGS\1800MESIntergrations.txt")
 print(dataFromFile)
 
 # close other chrome webpages if open
