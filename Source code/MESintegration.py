@@ -34,7 +34,7 @@ def LaunchBrowser():
     # MESWebSite = "http://fit-wcapp-01.subzero.com:8000/EnterpriseConsole/BPMUITemplates/Default/Repository/Site/CustomLogin.aspx?ListItemId=e0a7e9d4-02f2-4c6d-898c-8714b73c8c08&FormLink=NGDF%20Station%209050"
 
     driver = None
-    MESWebSite = "http://FIT-WCAPP-01.subzero.com:8000/EnterpriseConsole/BPMUITemplates/Default/Repository/Site/CustomLogin.aspx?ListItemId=E0A7E9D4-02F2-4C6D-898C-8714B73C8C08&FormLink=NGDF%20Station%201800"
+    MESWebSite = "ht'http://the-internet.herokuapp.com/tinymce'tp://FIT-WCAPP-01.subzero.com:8000/EnterpriseConsole/BPMUITemplates/Default/Repository/Site/CustomLogin.aspx?ListItemId=E0A7E9D4-02F2-4C6D-898C-8714B73C8C08&FormLink=NGDF%20Station%201800"
     # import Chrome web driver
 
     listOfChromeDrivers = fileList(".\\Drivers\\", [".exe"])
@@ -235,6 +235,13 @@ def MESWork(data, driver):
 # #--------------------------------------------------------------------------------------------------------------#
 # def MESLogout(driver):
 #     driver.quit()
+
+def testing(driver):
+    print('testing')
+    driver.switch_to.default_content()
+    userName = driver.findElement(By.find_element_by_class_name("skffb skflx txtUserName_skffb")).text()
+    print(userName)
+    print('testing')
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from operator import indexOf
-from MESintegration import MESLogIn
+from MESintegration import MESLogIn, testing
 from MESintegration import MESWork
 from ProcessKiller import killProcess
 
@@ -37,7 +37,8 @@ killProcess("CHROMEDRIVER.EXE")
 driver = MESLogIn(dataFromFile[0])
 
 # pass in data and the driver that was used to sign in
-MESWork(dataFromFile, driver)
+# MESWork(dataFromFile, driver)
+testing(driver)
 
 
 
