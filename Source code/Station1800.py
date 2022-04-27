@@ -38,7 +38,7 @@ driver = MESLogIn(dataFromFile[0])
 
 # pass in data and the driver that was used to sign in
 # MESWork(dataFromFile, driver)
-testing(driver)
+testing(driver, dataFromFile)
 
 
 
