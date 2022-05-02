@@ -17,6 +17,7 @@ def process_exists(process_name):
     # use built-in check_output right away
     output = subprocess.check_output(call, stdin=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).decode()
     # check in last line for process name
+    print(output)
     last_line = output.strip().split('\r\n')[-1]
     # because Fail message could be translated
     return last_line.lower().startswith(process_name.lower())

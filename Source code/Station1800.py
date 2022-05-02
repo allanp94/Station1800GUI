@@ -1,7 +1,9 @@
-from operator import indexOf
+from lib2to3.pgen2 import driver
 from MESintegration import MESLogIn, testing
 from MESintegration import MESWork
-from ProcessKiller import killProcess
+from ProcessKiller import killProcess, process_exists
+from selenium import webdriver
+
 
 # D1800
 # RFIDWritePlugin ---> files to put it in
@@ -12,7 +14,6 @@ from ProcessKiller import killProcess
 
 
 dataFromFile = ['','','','','']
-driver = None
 
 def openFile(name):
     with open(name, "r") as file1800:
@@ -29,17 +30,20 @@ openFile(r"C:\LOGS\1800MESIntegration.txt")
 print(dataFromFile)
 
 # close other chrome webpages if open
-killProcess("CHROME.EXE")
-killProcess("CHROMEDRIVER.EXE")
+# killProcess("CHROME.EXE")
+# killProcess("CHROMEDRIVER.EXE")
+
+if process_exists("Chromedriver.exe"):
+    print('chromedriver running')
+else:
+    print('not chromedriver available')
 
 # pass in badge number to log in to MES
 # function returns the chromedriver instance that was used to do so
 driver = MESLogIn(dataFromFile[0])
 
+
+
 # pass in data and the driver that was used to sign in
 MESWork(dataFromFile, driver)
 # testing(driver, dataFromFile)
-
-
-
-

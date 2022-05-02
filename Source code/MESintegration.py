@@ -83,7 +83,6 @@ def waitForWebsite(driver, findBy, item, waitTime):
                                "Sample required\nPlease, resolve this issue before continuing.\n"
                                "Accept this message ONLY AFTER the sample requirement has been satisfied")
 
-
     except Exception as e:
         print("No sample required. Carry on")
 
@@ -232,9 +231,6 @@ def MESWork(data, driver):
     driver.switch_to.default_content()
     return driver
 
-# #--------------------------------------------------------------------------------------------------------------#
-# def MESLogout(driver):
-#     driver.quit()
 
 def testing(driver):
     print('testing -- 1')
