@@ -30,8 +30,8 @@ openFile(r"C:\LOGS\1800MESIntegration.txt")
 print(dataFromFile)
 
 # close other chrome webpages if open
-# killProcess("CHROME.EXE")
-# killProcess("CHROMEDRIVER.EXE")
+killProcess("CHROME.EXE")
+killProcess("CHROMEDRIVER.EXE")
 
 if process_exists("Chromedriver.exe"):
     print('chromedriver running')
@@ -45,5 +45,5 @@ driver = MESLogIn(dataFromFile[0])
 
 
 # pass in data and the driver that was used to sign in
-MESWork(dataFromFile, driver)
-# testing(driver, dataFromFile)
+# MESWork(dataFromFile, driver)
+testing(driver, dataFromFile)

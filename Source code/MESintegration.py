@@ -7,6 +7,9 @@ from tkinter import messagebox
 import time
 import os
 from ProcessKiller import killProcess
+from selenium.webdriver.support.color import Color
+
+
 
 
 webdriver.ChromeOptions().add_argument("--ignore-certificate-errors")
@@ -106,7 +109,7 @@ def waitForWebsite(driver, findBy, item, waitTime):
         elif findBy =="Class":
             try:
 
-                WebDriverWait(driver, waitTime).until(EC.visibility_of_element_located(
+                element = WebDriverWait(driver, waitTime).until(EC.visibility_of_element_located(
                     (By.CLASS_NAME, item)))
 
                 """WebDriverWait(driver, waitTime).until(
@@ -114,6 +117,13 @@ def waitForWebsite(driver, findBy, item, waitTime):
                 )"""
 
                 print(item + " found")
+                elementColor = element.value_of_css_property("background-color")
+                
+                print(element.value_of_css_property("background-color"))
+                # print(Color.from_string('#00ff33').rgba)
+                print(Color.from_string(elementColor).hex)
+                # print(Color.from_string('blue').rgba)
+
                 return driver
             except:
                 print("Couldn't find item " + item)
@@ -225,23 +235,42 @@ def MESWork(data, driver):
 
     except:
         # Unit already scanned
-        driver = waitForWebsite(driver, "Class", "skfli sklc skc lblBackflushComplete_skc", 10)
-        driver = pressButton(driver, "Class", "Couldn't find scan for test button", "skfli sklc skc lblBackflushComplete_skc" )
+        driver = waitForWebsite(driver, "Class", "skfli.sklc.skc.lblBackflushComplete_skc", 10)
+        driver = pressButton(driver, "Class", "Couldn't find scan for test button", "skfli.sklc.skc.lblBackflushComplete_skc" )
 
     driver.switch_to.default_content()
     return driver
 
 
-def testing(driver):
-    print('testing -- 1')
-    driver.switch_to.default_content()
+def testing(driver, data):
+    
+    print("switching to default frame")
     try:
-        userName = driver.find_element_by_id("sampleoverlay")
-    except:
-        print("element not visible at the moment")
-    print(userName)
-    print('testing -- 2')
+        driver.switch_to.default_content()
+        print("switched to default frame")
+    except Exception as e:
 
+        if str(e).startswith("Message: chrome not reachable") == True:
+            print("Can't reach")
+            # Chrome was closed and needs to be relaunched
+            print("Chrome was closed and needs to be relaunched")
+
+            killProcess("CHROME.EXE")
+            killProcess("CHROMEDRIVER.EXE")
+
+            # Log in again
+            driver = MESLogIn(data[0])
+
+        else:
+            print(e)
+    # driver.switch_to.default_content()
+    driver = waitForWebsite(driver, "ID", "T7", 30)
+
+
+    driver,_ = fillEntryBox(driver, "ID", "Couldn't find serial entry box", data[1], ID="T7") # Input serial number
+    driver = pressButton(driver, "XPath", "Couldn't find load button", XPath="/html/body/form/div/div[10]/div[2]/div/div/div[1]/div[1]/div[4]/div/div[2]/div[5]/div[1]/div[4]/div/div/div[1]/div[1]/div[4]/div/div[2]/div/div[1]/div[2]/button")
+    driver = waitForWebsite(driver, "Class", "skfli.sklc.skc.lblBackflushComplete_skc", 15 )
+    print (driver)
 
 if __name__ == "__main__":
     pass
