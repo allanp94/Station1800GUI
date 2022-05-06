@@ -33,11 +33,6 @@ print(dataFromFile)
 killProcess("CHROME.EXE")
 killProcess("CHROMEDRIVER.EXE")
 
-if process_exists("Chromedriver.exe"):
-    print('chromedriver running')
-else:
-    print('not chromedriver available')
-
 # pass in badge number to log in to MES
 # function returns the chromedriver instance that was used to do so
 driver = MESLogIn(dataFromFile[0])
@@ -45,5 +40,5 @@ driver = MESLogIn(dataFromFile[0])
 
 
 # pass in data and the driver that was used to sign in
-# MESWork(dataFromFile, driver)
-testing(driver, dataFromFile)
+MESWork(dataFromFile, driver)
+# testing(driver, dataFromFile)

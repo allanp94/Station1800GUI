@@ -103,8 +103,7 @@ def waitForWebsite(driver, findBy, item, waitTime):
                 print("Couldn't find item: " + item)
                 messagebox.showwarning("Warning", "Couldn't find item: " + item)
 
-            finally:
-                return driver
+            return driver
 
         elif findBy =="Class":
             try:
@@ -117,14 +116,14 @@ def waitForWebsite(driver, findBy, item, waitTime):
                 )"""
 
                 print(item + " found")
-                elementColor = element.value_of_css_property("background-color")
+                # elementColor = element.value_of_css_property("background-color")
                 
-                print(element.value_of_css_property("background-color"))
+                # print(element.value_of_css_property("background-color"))
                 # print(Color.from_string('#00ff33').rgba)
-                print(Color.from_string(elementColor).hex)
+                # print(Color.from_string(elementColor).hex)
                 # print(Color.from_string('blue').rgba)
 
-                return driver
+                return driver, element
             except:
                 print("Couldn't find item " + item)
                 messagebox.showwarning("Warning", "Couldn't find item: " + item)
@@ -210,33 +209,46 @@ def MESWork(data, driver):
     driver = pressButton(driver, "XPath", "Couldn't find load button", XPath="/html/body/form/div/div[10]/div[2]/div/div/div[1]/div[1]/div[4]/div/div[2]/div[5]/div[1]/div[4]/div/div/div[1]/div[1]/div[4]/div/div[2]/div/div[1]/div[2]/button")
     driver = waitForWebsite(driver, "ID", "E2frameEmbedPage", 10)
 
-    print("Switch to contentFrame iFrame")
-    try:
-        driver.switch_to.frame("E2frameEmbedPage")
-        driver = waitForWebsite(driver, "ID", "T2", 10) #T2 is the "Scan Vendor Barcode" input box
+    driver, elementBackFlush = waitForWebsite(driver, "Class", "skfli.sklc.skc.lblBackflushComplete_skc", 10)
+    backflushHexColor = Color.from_string(elementBackFlush.value_of_css_property("background-color")).hex
 
-        # check to see if unit has a KCV requirement for puma
-        if 'DF' in data[1] or 'IR' in data[1]:
-            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[2], ID="T2")
+    #90ee90 is light green
+    if backflushHexColor == '#ffe866':
+        print("color is ash")
+        try:
+            driver.switch_to.frame("E2frameEmbedPage")
+            driver = waitForWebsite(driver, "ID", "T2", 10) #T2 is the "Scan Vendor Barcode" input box
+
+            # check to see if unit has a KCV requirement for puma
+            if 'DF' in data[1] or 'IR' in data[1]:
+                driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[2], ID="T2")
+                entryBox.send_keys(Keys.RETURN)
+                time.sleep(2)
+
+            # MDL KVC requirement 
+            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[3], ID="T2")
             entryBox.send_keys(Keys.RETURN)
             time.sleep(2)
 
-        # MDL KVC requirement 
-        driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[3], ID="T2")
-        entryBox.send_keys(Keys.RETURN)
-        time.sleep(2)
+            # if data[4] is true, means that two MDLs were scanned in by the user 
+            # and that the present unit is a 48' or 60' and has two MDL KCV requirements
+            if data[4]:
+                driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[4], ID="T2")
+                entryBox.send_keys(Keys.RETURN)
+                time.sleep(2)
+        except:
+            # Unit already scanned
+            # driver = waitForWebsite(driver, "Class", "skfli.sklc.skc.lblBackflushComplete_skc", 10)
+            # driver = pressButton(driver, "Class", "Couldn't find scan for test button", "skfli.sklc.skc.lblBackflushComplete_skc" )
 
-        # if data[4] is true, means that two MDLs were scanned in by the user 
-        # and that the present unit is a 48' or 60' and has two MDL KCV requirements
-        if data[4]:
-            driver, entryBox = fillEntryBox(driver, "ID", "Couldn't find vendor barcode entry box, ID", data[4], ID="T2")
-            entryBox.send_keys(Keys.RETURN)
-            time.sleep(2)
+            print('failed to input appropriate data into MES')
 
-    except:
-        # Unit already scanned
-        driver = waitForWebsite(driver, "Class", "skfli.sklc.skc.lblBackflushComplete_skc", 10)
-        driver = pressButton(driver, "Class", "Couldn't find scan for test button", "skfli.sklc.skc.lblBackflushComplete_skc" )
+    elif backflushHexColor == '#90ee90':
+        print ('color is green')
+        try:
+            driver = pressButton(driver, "Class", "Couldn't find scan for test button", "skfli.sklc.skc.lblBackflushComplete_skc" )
+        except:
+            print('could not find button to check for passed test from standard test interface')
 
     driver.switch_to.default_content()
     return driver
