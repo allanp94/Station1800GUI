@@ -12,12 +12,11 @@ def process_exists(process_name):
     These parameters make subprocess work with pyinstaller. Without them, the exe would not start
     """
 
-
     call = 'TASKLIST', '/FI', 'imagename eq %s' % process_name
     # use built-in check_output right away
     output = subprocess.check_output(call, stdin=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).decode()
     # check in last line for process name
-    print(output)
+    # print(output)
     last_line = output.strip().split('\r\n')[-1]
     # because Fail message could be translated
     return last_line.lower().startswith(process_name.lower())
@@ -31,3 +30,5 @@ def killProcess(application):
             pass
     else:
         print(application + " not found")
+
+
