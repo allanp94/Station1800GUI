@@ -25,7 +25,7 @@ print(dataFromFile)
 
 # close other chrome webpages
 killProcess("CHROME.EXE")
-killProcess("CHROMEDRIVER V80.EXE")
+killProcess("chromedriver.exe")
 
 # pass in badge number to log in to MES
 # function returns the chromedriver instance
