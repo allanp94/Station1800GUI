@@ -5,9 +5,7 @@ from ProcessKiller import killProcess
 
 # D1800
 # RFIDWritePlugin ---> files to put it in
-
 #LOGS/1800MESIntergrations ---> location of .txt file to read from
-
 #1800Script ---> .exe name
 
 dataFromFile = ['','','','','']
@@ -23,9 +21,11 @@ def openFile(name):
 openFile(r"C:\LOGS\1800MESIntegration.txt")
 print(dataFromFile)
 
-# close other chrome webpages
+# close other chrome browser(s) and driver(s)
 killProcess("CHROME.EXE")
+killProcess("chromedriverv80.exe")
 killProcess("chromedriver.exe")
+
 
 # pass in badge number to log in to MES
 # function returns the chromedriver instance

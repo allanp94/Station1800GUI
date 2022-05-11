@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from tkinter import messagebox
 import time
-import os
+import os, sys
 from ProcessKiller import killProcess
 from selenium.webdriver.support.color import Color
 
@@ -47,7 +47,7 @@ def LaunchBrowser():
             pass
 
     print("None of the drivers worked")
-    quit()
+    sys.exit()
 
 
 
@@ -211,11 +211,12 @@ def MESWork(data, driver):
 
             if unitReadyHexColor == "#90ee90":
                 print('unit is completed and ready to progress down the line')
-                quit()
+                sys.exit("MES requirements succesfully completed")
+
             else:
                 print('not completed -- test needs to start over')
                 messagebox.showwarning("Warning", "Standart Test Interface not satisfied -- retest unit")
-                quit()
+                sys.exit("STANDARD TEST INTERFACE NOT COMPLETED -- RETEST UNIT")
 
         except:
             print('failed to input appropriate data into MES')
@@ -228,11 +229,11 @@ def MESWork(data, driver):
 
         if unitReadyHexColor == "#90ee90":
             print('unit is completed and ready to progress down the line')
-            quit()
+            sys.exit("MES requirements succesfully completed")
         else:
             print('not completed -- test needs to start over')
             messagebox.showwarning("Warning", "Standart Test Interface not satisfied -- retest unit")
-            quit()
+            sys.exit("MES requirements not completed")
 
     driver.switch_to.default_content()
 

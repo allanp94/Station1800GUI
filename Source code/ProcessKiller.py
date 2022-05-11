@@ -30,5 +30,3 @@ def killProcess(application):
             pass
     else:
         print(application + " not found")
-
-
